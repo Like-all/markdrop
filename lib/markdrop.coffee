@@ -3,47 +3,21 @@ relative = require 'relative'
 
 generateTag = (fileExtension, extension, relativePath, fileName, textEditor) ->
     type = undefined
-    if fileExtension != extension and extension != 'img'
-        textEditor.insertText '<!-- Converted from ' + fileExtension + ' -->\n'
     textEditor.insertText type = {
-        'js': '<script src="' + relativePath.replace(fileExtension, extension) + '"></script>\n'
-        'css': '<link href="' + relativePath.replace(fileExtension, extension) + '" rel="stylesheet">\n'
-        'html': '<a href="' + relativePath.replace(fileExtension, extension) + '"></a>\n'
-        'php': '<a href="' + relativePath.replace(fileExtension, extension) + '"></a>\n'
-        'img': '<img src="' + relativePath + '" alt="' + fileName + '">\n'
-        'video': '<video src="' + relativePath + '" controls></video>\n'
-        'audio': '<audio src="' + relativePath + '" controls></audio>\n'
+        'img': '![' + fileName + '](' + relativePath + ')\n'
     }[extension]
     return
 
 intOrExtDrag = (currentPathFileExtension, fileExtension, relativePath, fileName, textEditor, selectedFiles, currentPath) ->
 
-    scriptArray = ['js', 'jsx', 'coffee']
-    linkArray = ['css', 'scss', 'less']
     imageArray = ['jpg', 'jpeg', 'png', 'apng', 'ico' ,'gif' ,'svg' ,'bmp' ,'webp']
-    htmlArray = ['html']
-    phpArray = ['php']
-    audioArray = ['mp3', 'wav', 'ogg']
-    videoArray = ['mp4', 'webm', 'ogv']
 
     count = 0
     while count < selectedFiles.length
       selected = selectedFiles[count].file?.path || selectedFiles[count].path
-      if currentPathFileExtension.toString() == 'html'
-          if scriptArray.includes(fileExtension)
-              generateTag fileExtension, 'js', relative(currentPath, selected), fileName, textEditor
-          if linkArray.includes(fileExtension)
-              generateTag fileExtension, 'css', relative(currentPath, selected), fileName, textEditor
+      if currentPathFileExtension.toString() == 'md'
           if imageArray.includes(fileExtension)
               generateTag fileExtension, 'img', relative(currentPath, selected), fileName, textEditor
-          if htmlArray.includes(fileExtension)
-              generateTag fileExtension, 'html', relative(currentPath, selected), fileName, textEditor
-          if phpArray.includes(fileExtension)
-              generateTag fileExtension, 'php', relative(currentPath, selected), fileName, textEditor
-          if audioArray.includes(fileExtension)
-              generateTag fileExtension, 'audio', relative(currentPath, selected), fileName, textEditor
-          if videoArray.includes(fileExtension)
-              generateTag fileExtension, 'video', relative(currentPath, selected), fileName, textEditor
       else
         textEditor.insertText "'#{relative currentPath, selected}'" + '\n'
       count++

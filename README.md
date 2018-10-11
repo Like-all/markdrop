@@ -1,4 +1,4 @@
-# drag-relative-path
+# markdrop
 
 Drag files from the tree-view (or externally) to create HTML tags with automatic relative paths
 
